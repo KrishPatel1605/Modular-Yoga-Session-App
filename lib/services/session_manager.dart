@@ -5,8 +5,11 @@ class SessionManager {
   int segmentIndex = 0;
   int scriptIndex = 0;
   int currentLoop = 0;
+  late int defaultLoopCount;
 
-  SessionManager(this.session);
+  SessionManager(this.session) {
+    defaultLoopCount = session.metadata.defaultLoopCount;
+  }
 
   YogaSegment get currentSegment => session.sequence[segmentIndex];
   ScriptLine get currentScript => currentSegment.script[scriptIndex];
@@ -16,7 +19,8 @@ class SessionManager {
 
   void nextScript() {
     if (isLastScript) {
-      if (currentSegment.type == 'loop' && currentLoop < currentSegment.iterations - 1) {
+      final loopLimit = currentSegment.iterations > 0 ? currentSegment.iterations : defaultLoopCount;
+    if (currentSegment.type == 'loop' && currentLoop < loopLimit - 1) {
         currentLoop++;
         scriptIndex = 0;
       } else {
@@ -47,5 +51,14 @@ class SessionManager {
 
   bool isCurrentSegment(YogaSegment segment) {
     return session.sequence[segmentIndex] == segment;
+  }
+
+  int get totalDurationSeconds {
+    int total = 0;
+    for (final segment in session.sequence) {
+      final iterations = segment.type == 'loop' ? (segment.iterations > 0 ? segment.iterations : defaultLoopCount) : 1;
+      total += segment.durationSec * iterations;
+    }
+    return total;
   }
 }
