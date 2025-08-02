@@ -1,4 +1,3 @@
-// screens/home_screen.dart
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -42,46 +41,79 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Yoga Sessions')),
+      appBar: AppBar(
+        title: const Text('Yoga Sessions'),
+        backgroundColor: Colors.deepPurple,
+        foregroundColor: Colors.white,
+      ),
       body:
           sessions.isEmpty
               ? const Center(child: CircularProgressIndicator())
               : ListView.builder(
+                padding: const EdgeInsets.all(12),
                 itemCount: sessions.length,
                 itemBuilder: (_, i) {
                   final session = sessions[i];
-                  // In itemBuilder inside ListView.builder
-                  return ListTile(
-                    title: Text(session.metadata.title),
-                    subtitle: Text(session.metadata.category),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.remove_red_eye),
-                          tooltip: 'Preview',
-                          onPressed:
-                              () => Navigator.push(
+                  return Card(
+                    elevation: 3,
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      leading: const CircleAvatar(
+                        backgroundColor: Colors.deepPurple,
+                        child: Icon(
+                          Icons.self_improvement,
+                          color: Colors.white,
+                        ),
+                      ),
+                      title: Text(
+                        session.metadata.title,
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      subtitle: Padding(
+                        padding: const EdgeInsets.only(top: 4.0),
+                        child: Text(
+                          session.metadata.category,
+                          style: const TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.remove_red_eye),
+                            tooltip: 'Preview',
+                            onPressed: () {
+                              Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder:
                                       (_) => PreviewScreen(session: session),
                                 ),
-                              ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.arrow_forward),
-                          tooltip: 'Start Session',
-                          onPressed:
-                              () => Navigator.push(
+                              );
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.play_arrow),
+                            tooltip: 'Start Session',
+                            onPressed: () {
+                              Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder:
                                       (_) => SessionScreen(session: session),
                                 ),
-                              ),
-                        ),
-                      ],
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },
