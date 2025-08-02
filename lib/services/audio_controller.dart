@@ -1,23 +1,39 @@
-// services/audio_controller.dart
 import 'package:just_audio/just_audio.dart';
 
 class AudioController {
-  final AudioPlayer _player = AudioPlayer();
+  final AudioPlayer _bgPlayer = AudioPlayer(); // background music
+  final AudioPlayer _fxPlayer = AudioPlayer(); // segment audio
 
-  Future<void> play(String assetPath) async {
+  Future<void> playBackground(String assetPath) async {
     try {
-      await _player.setAsset(assetPath);
-      await _player.play();
+      await _bgPlayer.setAsset(assetPath);
+      await _bgPlayer.setLoopMode(LoopMode.one);
+      await _bgPlayer.play();
     } catch (e) {
-      print("Audio error: $e");
+      print("BG audio error: $e");
     }
   }
 
-  Future<void> pause() async => await _player.pause();
-  Future<void> resume() async => await _player.play();
-  Future<void> stop() async => await _player.stop();
-  Future<void> dispose() async => await _player.dispose();
+  Future<void> stopBackground() async => await _bgPlayer.stop();
 
-  Stream<Duration> get positionStream => _player.positionStream;
-  bool get isPlaying => _player.playing;
+  Future<void> playSegment(String assetPath) async {
+    try {
+      await _fxPlayer.setAsset(assetPath);
+      await _fxPlayer.setLoopMode(LoopMode.off);
+      await _fxPlayer.play();
+    } catch (e) {
+      print("FX audio error: $e");
+    }
+  }
+
+  Future<void> pauseSegment() async => await _fxPlayer.pause();
+  Future<void> resumeSegment() async => await _fxPlayer.play();
+  Future<void> stopSegment() async => await _fxPlayer.stop();
+
+  Future<void> dispose() async {
+    await _bgPlayer.dispose();
+    await _fxPlayer.dispose();
+  }
+
+  bool get isSegmentPlaying => _fxPlayer.playing;
 }
