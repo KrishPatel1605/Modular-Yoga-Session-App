@@ -242,14 +242,14 @@ class _SessionScreenState extends State<SessionScreen> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _togglePlay,
-        backgroundColor: Colors.deepPurple,
-        child: Icon(
-          isPlaying ? Icons.pause : Icons.play_arrow,
-          color: Colors.white,
-        ),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: _togglePlay,
+      //   backgroundColor: Colors.deepPurple,
+      //   child: Icon(
+      //     isPlaying ? Icons.pause : Icons.play_arrow,
+      //     color: Colors.white,
+      //   ),
+      // ),
     );
   }
 
