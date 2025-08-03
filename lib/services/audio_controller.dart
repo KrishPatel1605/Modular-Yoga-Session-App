@@ -6,7 +6,7 @@ class AudioController {
 
   Future<void> playBackground(String assetPath) async {
     try {
-      await _bgPlayer.setAsset(assetPath);
+      await _bgPlayer.setAudioSource(AudioSource.asset(assetPath));
       await _bgPlayer.setLoopMode(LoopMode.one);
       await _bgPlayer.play();
     } catch (e) {
@@ -18,7 +18,7 @@ class AudioController {
 
   Future<void> playSegment(String assetPath) async {
     try {
-      await _fxPlayer.setAsset(assetPath);
+      await _fxPlayer.setAudioSource(AudioSource.asset(assetPath));
       await _fxPlayer.setLoopMode(LoopMode.off);
       await _fxPlayer.play();
     } catch (e) {
